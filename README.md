@@ -53,17 +53,6 @@ Pastikan Anda telah menginstal **[Docker Desktop / Docker Compose](https://www.d
 - **Email:** `admin@adago.com`
 - **Password:** `<Password Rahasia Anda>`
 
----
-
-## Potret Aplikasi (Screenshots)
-*(Opsional: Unggah gambar asli web Anda ke folder `/public/image` di GitHub dan ganti nama file di bawah untuk memukau pengunjung profil Anda!)*
-
-| Halaman Utama Web | Dasbor Panel Admin |
-| :---: | :---: |
-| ![Home](https://via.placeholder.com/400x250/800000/FFFFFF?text=Preview+Beranda) | ![Admin](https://via.placeholder.com/400x250/2E8B57/FFFFFF?text=Preview+Dashboard) |
-
----
-
 ## Pengembang & Lisensi
 
 Proyek kolaboratif kelas tinggi **Ada Transport Go** 2026 dikembangkan oleh:
