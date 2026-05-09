@@ -15,14 +15,24 @@ async function initDB() {
   try {
     // Note: If the database does not exist, creating the pool with 'database: adago_db' will fail.
     // So we connect without database to create it if it doesn't exist.
-    const tempPool = mysql.createPool({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASS || '<MASUKKAN_PASSWORD_DB_ANDA>',
-    });
-
-    await tempPool.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'adago_db'}\``);
-    await tempPool.end();
+    let retries = 5;
+    while (retries > 0) {
+      try {
+        const tempPool = mysql.createPool({
+          host: process.env.DB_HOST || 'localhost',
+          user: process.env.DB_USER || 'root',
+          password: process.env.DB_PASS || '<MASUKKAN_PASSWORD_DB_ANDA>',
+        });
+        await tempPool.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'adago_db'}\``);
+        await tempPool.end();
+        break;
+      } catch (err) {
+        console.log(`Database not ready yet, retrying in 3 seconds... (${retries} attempts left)`);
+        retries -= 1;
+        await new Promise(res => setTimeout(res, 3000));
+        if (retries === 0) throw err;
+      }
+    }
 
     console.log('Database adago_db created or already exists.');
 

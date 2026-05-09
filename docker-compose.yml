@@ -17,6 +17,7 @@ services:
     container_name: adago_app
     ports:
       - "3000:3000"
+      - "3443:3443"
     environment:
       - DB_HOST=db
       - DB_USER=root
