@@ -1,4 +1,4 @@
-# 📘 Ensiklopedia Arsitektur Master "Ada Transport Go"
+# Ensiklopedia Arsitektur Master "Ada Transport Go"
 
 Selamat datang di pedoman mutlak arsitektur **Ada Transport Go**. Sesuai dengan spesifikasi pengembangan tingkat lanjut, dokumen ini ditulis menyerupai "Master Manual" dari seorang *Senior Software Architect* untuk mendedah, membedah, dan menguraikan fungsi **SETIAP** komponen krusial yang membangun ekosistem aplikasi ini secara utuh. 
 
@@ -6,7 +6,7 @@ Sistem ini didesain menggunakan pola desain MVC hibrida dengan Express.js (*Back
 
 ---
 
-## 🏗️ BAB 1: Lapisan Akar & Infrastruktur (Root & Docker)
+## BAB 1: Lapisan Akar & Infrastruktur (Root & Docker)
 
 Lapisan akar adalah komponen yang mengatur bagaimana aplikasi hidup di dalam lingkungan server.
 
@@ -34,7 +34,7 @@ Mencegah fenomena "Di komputer saya jalan, tapi pas di-hosting error".
 
 ---
 
-## 🗄️ BAB 2: Lapisan Model & Data (Models)
+## BAB 2: Lapisan Model & Data (Models)
 
 ### 1. `models/db.js` (Saraf Pusat Database & Seeding)
 Inilah yang menghubungkan Node.js dengan instansi MySQL yang berjalan di dalam Docker.
@@ -51,7 +51,7 @@ Inilah yang menghubungkan Node.js dengan instansi MySQL yang berjalan di dalam D
 
 ---
 
-## 🚦 BAB 3: Sirkuit Logika / Controllers (`routes/`)
+## BAB 3: Sirkuit Logika / Controllers (`routes/`)
 
 Ini adalah stasiun stasiun yang menangkap tautan (*URL*) yang diketik pengunjung.
 
@@ -84,7 +84,7 @@ Ini adalah stasiun stasiun yang menangkap tautan (*URL*) yang diketik pengunjung
 
 ---
 
-## 🎭 BAB 4: Layar Tampilan Muka / Presentation (`views/`)
+## BAB 4: Layar Tampilan Muka / Presentation (`views/`)
 
 Folder ini berisi file `.ejs` (Template HTML bertenaga).
 
@@ -106,7 +106,7 @@ Folder ini berisi file `.ejs` (Template HTML bertenaga).
 
 ---
 
-## 🎨 BAB 5: Mesin Frontend Statis (`public/`)
+## BAB 5: Mesin Frontend Statis (`public/`)
 
 File ini dilepaskan langsung ke klien/browser pengunjung tanpa campur tangan mesin backend Node.
 
@@ -119,7 +119,7 @@ Berbeda dengan Node.js (yang berjalan di mesin server Docker), file ini didownlo
 
 ---
 
-## 📘 Kesimpulan & Rekomendasi
+## Kesimpulan & Rekomendasi
 Sistem ini dibuat solid karena berhasil memisahkan tanggung jawab secara absolut:
 - MySQL (**Data**)
 - Node/Express (**Polisi & Pengantar Logika**)
@@ -127,4 +127,4 @@ Sistem ini dibuat solid karena berhasil memisahkan tanggung jawab secara absolut
 - Multer (**Pengangkut File**) 
 - Docker (**Pelindung Ekosistem**)
 
-Dengan pemahaman manual ensiklopedia ini, Anda memiliki kendali mental dan teknis 100% untuk memodifikasi apa pun di dalam kerangka struktur yang dibangun. Selamat mengembangkan karya tingkat lanjut ini! 💯
+Dengan pemahaman manual ensiklopedia ini, Anda memiliki kendali mental dan teknis 100% untuk memodifikasi apa pun di dalam kerangka struktur yang dibangun. Selamat mengembangkan karya tingkat lanjut ini!
