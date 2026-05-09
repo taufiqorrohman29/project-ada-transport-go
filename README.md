@@ -1,7 +1,5 @@
 # Ada Transport Go
 
-![Banner Placeholder](https://via.placeholder.com/1200x300/800000/FFFFFF?text=Ada+Transport+Go+-+Trusted+Mobility+Partner)
-
 **Ada Transport Go** adalah sebuah ekosistem *Full-Stack* manajemen layanan transportasi darat modern. Platform ini menyediakan solusi holistik mulai dari sistem pemesanan (*booking*) travel antarkota, penyewaan kendaraan premium, hingga pemesanan paket pariwisata wisata secara dinamis dan antarmuka yang elegan.
 
 ---
