@@ -1,0 +1,29 @@
+# Environment Configs
+.env
+.env.local
+
+# Dependency directories
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# SSL Certificates & Security
+*.pem
+*.key
+*.cert
+keys/
+
+# Database dumps / sqlite
+*.sqlite
+*.db
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# File Uploads (We omit sensitive admin uploads, but keep the folder alive for Docker)
+public/uploads/*
+!public/uploads/.gitkeep

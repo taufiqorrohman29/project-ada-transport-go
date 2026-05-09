@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pemesanan - Ada Transport Go</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .booking-history-container {
+            max-width: 1200px;
+            margin: 120px auto 50px auto;
+            padding: 20px;
+            min-height: 50vh;
+        }
+
+        .history-header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--maroon-color);
+            padding-bottom: 10px;
+        }
+
+        .history-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-gold);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .history-card h3 {
+            color: var(--maroon-color);
+            margin-bottom: 10px;
+            flex-basis: 100%;
+        }
+
+        .history-details p {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .history-status {
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background-color: #f8dbdb;
+            color: var(--maroon-color);
+            text-align: center;
+            display: inline-block;
+        }
+
+        .history-status.approved {
+            background-color: #e0f8db;
+            color: #2e7d32;
+        }
+
+        .btn-ticket {
+            background-color: var(--maroon-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn-ticket:hover {
+            background-color: var(--accent-gold);
+            color: var(--primary-color);
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 50px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('layouts/header') %>
+
+        <div class="booking-history-container">
+            <div class="history-header">
+                <h2>Riwayat Pemesanan Anda</h2>
+            </div>
+
+            <% if (bookings && bookings.length> 0) { %>
+                <div class="history-list">
+                    <% bookings.forEach(booking=> { %>
+                        <div class="history-card">
+                            <h3>Pemesanan: <%= booking.type %>
+                            </h3>
+                            <div class="history-details">
+                                <p><strong>Ref Code:</strong>
+                                    <%= booking.booking_ref %>
+                                </p>
+                                <p><strong>Detail:</strong>
+                                    <%= booking.detail %>
+                                </p>
+                                <p><strong>Tanggal Keberangkatan:</strong>
+                                    <%= booking.date %> pukul <%= booking.time %>
+                                </p>
+                                <p><strong>Penumpang:</strong>
+                                    <%= booking.passengers %> Orang
+                                </p>
+                                <p><strong>Total Harga:</strong>
+                                    <%= booking.price %>
+                                </p>
+                            </div>
+                            <div class="history-actions">
+                                <div class="history-status <%= booking.status === 'Disetujui' ? 'approved' : '' %>"
+                                    style="margin-bottom: 10px;">
+                                    <%= booking.status %>
+                                </div>
+                                <br>
+                                <a href="/ticket/<%= booking.booking_ref %>" class="btn-ticket">
+                                    <i class="fas fa-ticket-alt"></i> Lihat E-Ticket
+                                </a>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } else { %>
+                    <div class="empty-history">
+                        <i class="fas fa-suitcase fa-3x" style="color: #ccc; margin-bottom: 15px;"></i>
+                        <p>Anda belum memiliki riwayat pemesanan.</p>
+                        <a href="/booking" class="btn btn-primary" style="margin-top: 15px;">Pesan Sekarang</a>
+                    </div>
+                    <% } %>
+        </div>
+
+        <%- include('layouts/footer') %>
+
+</body>
+
+</html>

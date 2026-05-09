@@ -1,0 +1,75 @@
+<%- include('layouts/header') %>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title contact-title">KONTAK KAMI</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Alamat</h3>
+                            <p>Jl. Raya Kawi No. 16 Gandusari Blitar - Jawa Timur</p>
+                            <p>Jl. Perkebunan 2 Pangkru Talun - Blitar - Jawa Timur</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h3>Whatsaap</h3>
+                            <p>+62 823-3464-2165</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <h3>Instagram</h3>
+                            <p>@travel_blitar_</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Jam Operasional</h3>
+                            <p>Senin - Sabtu: 08.00 - 20.00</p>
+                            <p>Minggu: 09.00 - 17.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contact-form" action="/api/contact" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="name" id="name" placeholder="Nama Lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" name="phone" id="phone" placeholder="Nomor Telepon" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" id="message" rows="5" placeholder="Pesan" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('success') === 'true') {
+                    // If there's a showNotification function available from layout, you can use it, else alert
+                    if (typeof showNotification === 'function') {
+                        showNotification("Terima kasih! Pesan Anda telah berhasil dikirim.");
+                    } else {
+                        alert("Terima kasih! Pesan Anda telah berhasil dikirim.");
+                    }
+                    // Cleanup URL
+                    window.history.replaceState(null, null, window.location.pathname);
+                }
+            });
+        </script>
+
+        <%- include('layouts/footer') %>

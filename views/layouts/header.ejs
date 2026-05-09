@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Transport Go - Layanan Transportasi & Pariwisata</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="logo">
+                <a href="/" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                    <div class="logo-icon">
+                        <img src="/image/imagelogo-removebg-preview.png" alt="Logo ADA Transport Go">
+                    </div>
+                    <h1>Ada Transport Go</h1>
+                </a>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/layanan" class="nav-link">Layanan</a></li>
+                    <li><a href="/destinasi" class="nav-link">Destinasi</a></li>
+                    <li><a href="/booking" class="nav-link">Booking</a></li>
+                    <li><a href="/kontak" class="nav-link">Kontak</a></li>
+                    <li class="profile-dropdown" style="display: flex; align-items: center;">
+                        <a href="<%= user ? '#' : '/auth' %>" id="nav-login-btn" class="nav-link"
+                            style="display: flex; align-items: center; gap: 5px; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <% if(user) { %><i class="fas fa-user-circle"></i>
+                                <span
+                                    style="overflow: hidden; text-overflow: ellipsis; display: inline-block; vertical-align: middle;">
+                                    <%= user.username %>
+                                </span>
+                                <% } else { %>Login / Register<% } %>
+                        </a>
+                        <% if(user) { %>
+                            <div class="dropdown-menu">
+                                <a href="/profile" id="dropdown-profile-link"><i class="fas fa-user-circle"></i> Profil
+                                    Saya</a>
+                                <a href="/booking-history" id="dropdown-bookings-link"><i
+                                        class="fas fa-clipboard-list"></i> Riwayat Pemesanan</a>
+                                <a href="/api/auth/logout" id="dropdown-logout-link"><i class="fas fa-sign-out-alt"></i>
+                                    Keluar</a>
+                            </div>
+                            <% } %>
+                    </li>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Success/Error Message Overlay Support -->
+    <% if (typeof message !=='undefined' && message) { %>
+        <div class="notification"
+            style="position: fixed; top: 100px; right: 20px; background-color: var(--maroon-color); color: white; padding: 15px 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); z-index: 3000;">
+            <%= message %>
+        </div>
+        <% } %>
+
+            <div style="padding-top: 80px;">
+                <!-- Page specific content will go below -->
+
+                <script>
+                    // Dropdown profile toggle untuk nav-login-btn (MPA header baru)
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const navLoginBtn = document.getElementById('nav-login-btn');
+                        const profileDropdown = navLoginBtn ? navLoginBtn.closest('.profile-dropdown') : null;
+
+                        if (navLoginBtn && profileDropdown) {
+                            navLoginBtn.addEventListener('click', function (e) {
+                                // Only toggle dropdown if user is logged in (has dropdown-menu child)
+                                var dropdownMenu = profileDropdown.querySelector('.dropdown-menu');
+                                if (dropdownMenu) {
+                                    e.preventDefault();
+                                    profileDropdown.classList.toggle('active');
+                                }
+                                // If no dropdown-menu exists (user not logged in), allow default navigation to /auth
+                            });
+
+                            // Tutup dropdown jika klik di luar
+                            document.addEventListener('click', function (e) {
+                                if (!profileDropdown.contains(e.target)) {
+                                    profileDropdown.classList.remove('active');
+                                }
+                            });
+                        }
+
+                        // === HAMBURGER MENU (mobile) ===
+                        const hamburger = document.querySelector('.hamburger');
+                        const navbar = document.querySelector('.navbar');
+
+                        if (hamburger && navbar) {
+                            hamburger.addEventListener('click', function (e) {
+                                e.stopPropagation();
+                                hamburger.classList.toggle('active');
+                                navbar.classList.toggle('active');
+                            });
+
+                            // Close nav menu when any nav-link is clicked (mobile), EXCEPT the login dropdown toggle
+                            document.querySelectorAll('.nav-link:not(#nav-login-btn)').forEach(function (link) {
+                                link.addEventListener('click', function () {
+                                    hamburger.classList.remove('active');
+                                    navbar.classList.remove('active');
+                                });
+                            });
+
+                            // Close nav when clicking outside it
+                            document.addEventListener('click', function (e) {
+                                if (navbar.classList.contains('active') &&
+                                    !navbar.contains(e.target) &&
+                                    !hamburger.contains(e.target)) {
+                                    hamburger.classList.remove('active');
+                                    navbar.classList.remove('active');
+                                }
+                            });
+                        }
+                    });
+                </script>

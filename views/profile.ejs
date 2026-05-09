@@ -1,0 +1,102 @@
+<%- include('layouts/header') %>
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .profile-info {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .profile-info label {
+            font-weight: 600;
+            color: #555;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .profile-info span {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .profile-actions a,
+        .profile-actions button {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-logout {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+
+    <div class="container">
+        <div class="profile-container">
+            <h2><i class="fas fa-user-circle"></i> Profil Saya</h2>
+
+            <div class="profile-info">
+                <label>Username</label>
+                <span>
+                    <%= user.username %>
+                </span>
+            </div>
+            <div class="profile-info">
+                <label>Email</label>
+                <span>
+                    <%= user.email %>
+                </span>
+            </div>
+            <div class="profile-info">
+                <label>Role</label>
+                <span>
+                    <%= user.role %>
+                </span>
+            </div>
+
+            <div class="profile-actions">
+                <a href="/api/auth/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+                <form action="/api/auth/delete-account" method="POST" style="flex:1; display:flex;"
+                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan.')">
+                    <button type="submit" class="btn-delete" style="flex:1;"><i class="fas fa-trash"></i> Hapus
+                        Akun</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('layouts/footer') %>

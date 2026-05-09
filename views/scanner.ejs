@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner Web Admin - Ada Transport Go</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #fff;
+            color: #000;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff007f;
+        }
+
+        .header .profile-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #eee;
+            border-radius: 50%;
+        }
+
+        .cam-container {
+            flex: 1;
+            position: relative;
+            background-color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #reader {
+            width: 100%;
+            height: 100%;
+        }
+
+        .scan-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .scan-box {
+            width: 250px;
+            height: 250px;
+            border: 2px solid rgba(255, 0, 127, 0.3);
+            position: relative;
+            box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Glowing neon pink corners */
+        .scan-box::before,
+        .scan-box::after,
+        .scan-corners-1::before,
+        .scan-corners-1::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-color: #ff007f;
+            border-style: solid;
+            box-shadow: 0 0 10px #ff007f;
+        }
+
+        .scan-box::before {
+            top: 0;
+            left: 0;
+            border-width: 4px 0 0 4px;
+            border-top-left-radius: 20px;
+        }
+
+        .scan-box::after {
+            top: 0;
+            right: 0;
+            border-width: 4px 4px 0 0;
+            border-top-right-radius: 20px;
+        }
+
+        .scan-corners-1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .scan-corners-1::before {
+            bottom: 0;
+            left: 0;
+            border-width: 0 0 4px 4px;
+            border-bottom-left-radius: 20px;
+        }
+
+        .scan-corners-1::after {
+            bottom: 0;
+            right: 0;
+            border-width: 0 4px 4px 0;
+            border-bottom-right-radius: 20px;
+        }
+
+        .scan-text {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Bottom Sheet */
+        .bottom-sheet {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            color: #000;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-sheet.show {
+            bottom: 0;
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #2a9d8f;
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .status-icon.error {
+            background-color: #e76f51;
+        }
+
+        .bs-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .bs-desc {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .bs-btn {
+            background-color: #ff007f;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>ADA Transport Go</h1>
+        <div class="profile-icon"></div>
+    </div>
+
+    <div class="cam-container">
+        <div id="reader"></div>
+        <div class="scan-overlay">
+            <div class="scan-box">
+                <div class="scan-corners-1"></div>
+            </div>
+            <div class="scan-text">Arahkan kamera ke QR Code E-Ticket</div>
+        </div>
+    </div>
+
+    <div class="bottom-sheet" id="result-sheet">
+        <div class="status-icon" id="status-icon">&#10003;</div>
+        <div class="bs-title" id="scan-title">SCAN BERHASIL</div>
+        <div class="bs-desc" id="scan-id">ID: ATGO-XXXXX</div>
+        <div class="bs-desc" id="scan-name">Nama: -</div>
+        <button class="bs-btn" onclick="continueScanning()">Scan Tiket Lain</button>
+    </div>
+
+    <script>
+        // Check if we are in a secure context (HTTPS or localhost)
+        const isSecureContext = window.isSecureContext;
+
+        if (!isSecureContext) {
+            // Not HTTPS — show helpful redirect message
+            const scanText = document.querySelector('.scan-text');
+            if (scanText) {
+                const httpsUrl = 'https://' + location.hostname + ':3443' + location.pathname;
+                scanText.innerHTML =
+                    '⚠️ Kamera memerlukan HTTPS.<br>' +
+                    '<a href="' + httpsUrl + '" style="color:#ff007f;font-weight:600;">' +
+                    'Klik di sini untuk buka via HTTPS &rarr;</a>';
+            }
+        } else {
+            const html5QrCode = new Html5Qrcode("reader");
+            const bottomSheet = document.getElementById('result-sheet');
+            let isScanned = false;
+
+            function onScanSuccess(decodedText, decodedResult) {
+                if (isScanned) return;
+                isScanned = true;
+                html5QrCode.pause();
+
+                fetch('/api/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ booking_ref: decodedText })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('status-icon').innerHTML = '&#10003;';
+                            document.getElementById('status-icon').className = 'status-icon';
+                            document.getElementById('scan-title').innerText = 'SCAN BERHASIL';
+                            document.getElementById('scan-id').innerText = `ID: ${data.data.id}`;
+                            document.getElementById('scan-name').innerText = `Nama: ${data.data.name}`;
+                        } else {
+                            document.getElementById('status-icon').innerHTML = '&#10008;';
+                            document.getElementById('status-icon').className = 'status-icon error';
+                            document.getElementById('scan-title').innerText = 'SCAN GAGAL';
+                            document.getElementById('scan-id').innerText = data.message;
+                            document.getElementById('scan-name').innerText = `Data invalid.`;
+                        }
+                        bottomSheet.classList.add('show');
+                    })
+                    .catch(err => {
+                        alert("Error validating ticket.");
+                        continueScanning();
+                    });
+            }
+
+            function continueScanning() {
+                bottomSheet.classList.remove('show');
+                setTimeout(() => {
+                    isScanned = false;
+                    html5QrCode.resume();
+                }, 500);
+            }
+
+            // Expose to global scope for the button onclick
+            window.continueScanning = continueScanning;
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                onScanSuccess
+            ).catch(err => {
+                console.error("Camera access denied or error:", err);
+                const scanText = document.querySelector('.scan-text');
+                if (scanText) {
+                    scanText.innerHTML =
+                        '⚠️ Kamera tidak dapat diakses.<br>' +
+                        '<small>Pastikan izin kamera sudah diberikan di pengaturan browser.</small>';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

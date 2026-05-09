@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: adago_db
+    environment:
+      MYSQL_ROOT_PASSWORD: <RAHASIA_PASSWORD_DB_ANDA>
+      MYSQL_DATABASE: adago_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: adago_app
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=<RAHASIA_PASSWORD_DB_ANDA>
+      - DB_NAME=adago_db
+      - PORT=3000
+      - JWT_SECRET=<RAHASIA_JWT_TOKEN_ANDA>
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  db_data:

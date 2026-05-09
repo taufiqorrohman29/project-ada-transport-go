@@ -1,0 +1,42 @@
+<%- include('layouts/header') %>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title services-title">LAYANAN</h2>
+            <div class="services-grid">
+                <div class="service-card" data-service="intercity">
+                    <div class="service-image">
+                        <img src="/image layanan/image2.jpg" alt="Transportasi Antar Kota">
+                    </div>
+                    <div class="service-content">
+                        <h3>Transportasi Antar Kota</h3>
+                        <p>Layanan transportasi antar kota dengan armada nyaman dan aman</p>
+                        <a href="/booking?tab=intercity" class="btn service-book-btn">Pesan Sekarang</a>
+                    </div>
+                </div>
+                <div class="service-card" data-service="rental">
+                    <div class="service-image">
+                        <img src="/image layanan/image3.jpg" alt="Sewa Kendaraan">
+                    </div>
+                    <div class="service-content">
+                        <h3>Sewa Kendaraan</h3>
+                        <p>Sewa kendaraan pribadi dengan berbagai pilihan mobil</p>
+                        <a href="/booking?tab=rental" class="btn service-book-btn">Pesan Sekarang</a>
+                    </div>
+                </div>
+                <div class="service-card" data-service="tourism">
+                    <div class="service-image">
+                        <img src="/image layanan/image4.jpg" alt="Paket Wisata">
+                    </div>
+                    <div class="service-content">
+                        <h3>Paket Wisata</h3>
+                        <p>Paket wisata lengkap ke berbagai destinasi menarik</p>
+                        <a href="/booking?tab=tourism" class="btn service-book-btn">Pesan Sekarang</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('layouts/footer') %>

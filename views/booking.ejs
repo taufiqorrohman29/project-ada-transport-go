@@ -1,0 +1,226 @@
+<%- include('layouts/header') %>
+
+    <!-- Booking Section -->
+    <section id="booking" class="booking-section">
+        <div class="container">
+            <h2 class="section-title booking-title">BOOKING</h2>
+            <div class="booking-tabs">
+                <button class="tab-btn active" data-tab="intercity">Transportasi Antar Kota</button>
+                <button class="tab-btn" data-tab="rental">Sewa Kendaraan</button>
+                <button class="tab-btn" data-tab="tourism">Paket Wisata</button>
+            </div>
+
+            <!-- Tab Content Container -->
+            <div class="tab-content-container">
+                <!-- Intercity Booking Tab -->
+                <div id="intercity" class="tab-content active">
+                    <h3>BOOKING ANTAR KOTA</h3>
+                    <div class="booking-grid">
+                        <% if(typeof intercities !=='undefined' && intercities.length> 0) { %>
+                            <% intercities.forEach(i=> { %>
+                                <div class="booking-card">
+                                    <div class="booking-image-slider">
+                                        <div class="slide slide-1" style="background-image: url('<%= i.image_1 %>');">
+                                        </div>
+                                        <div class="slide slide-2" style="background-image: url('<%= i.image_2 %>');">
+                                        </div>
+                                    </div>
+                                    <div class="booking-content">
+                                        <h3>
+                                            <%= i.name %>
+                                        </h3>
+                                        <p>Rute: <%= i.route_desc %>
+                                        </p>
+                                        <p class="price">Rp <%= i.price.toLocaleString('id-ID') %>
+                                        </p>
+                                        <button class="btn btn-book" data-route="<%= i.name %>"
+                                            data-price="<%= i.price %>" data-cat="Antar Kota">Pesan</button>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p style="text-align:center; padding: 20px;">Memuat data rute antar kota...</p>
+                                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Vehicle Rental Tab -->
+                <div id="rental" class="tab-content">
+                    <h3>BOOKING SEWA TRANSPORTASI</h3>
+                    <div class="rental-grid">
+                        <% if(typeof vehicles !=='undefined' && vehicles.length> 0) { %>
+                            <% vehicles.forEach(v=> { %>
+                                <div class="rental-card">
+                                    <div class="rental-image">
+                                        <img src="<%= v.image %>" alt="<%= v.name %>">
+                                    </div>
+                                    <div class="rental-content">
+                                        <h3>
+                                            <%= v.name %>
+                                        </h3>
+                                        <p>Kapasitas: <%= v.capacity %>
+                                        </p>
+                                        <p class="price">Rp <%= v.price.toLocaleString('id-ID') %>/hari</p>
+                                        <button class="btn btn-book" data-vehicle="<%= v.name %>"
+                                            data-price="<%= v.price %>" data-cat="Sewa Kendaraan">Pesan</button>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p>Loading vehicle data...</p>
+                                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Tourism Package Tab -->
+                <div id="tourism" class="tab-content">
+                    <h3>BOOKING PARIWISATA</h3>
+                    <div class="tourism-grid">
+                        <% if(typeof tourisms !=='undefined' && tourisms.length> 0) { %>
+                            <% tourisms.forEach(t=> { %>
+                                <div class="tourism-card">
+                                    <div class="tourism-image-slider">
+                                        <div class="slide slide-1" style="background-image: url('<%= t.image_1 %>');">
+                                        </div>
+                                        <div class="slide slide-2" style="background-image: url('<%= t.image_2 %>');">
+                                        </div>
+                                    </div>
+                                    <div class="tourism-content">
+                                        <h3>
+                                            <%= t.name %>
+                                        </h3>
+                                        <p>
+                                            <%= t.duration %>
+                                        </p>
+                                        <p>Destinasi: <%= t.destinations %>
+                                        </p>
+                                        <p class="price">Mulai Rp. <%= t.price.toLocaleString('id-ID') %>/orang</p>
+                                        <button class="btn btn-book" data-package="<%= t.name %>"
+                                            data-price="<%= t.price %>" data-cat="Paket Wisata"
+                                            data-ismultiple="true">Pesan</button>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p style="text-align:center; padding: 20px;">Memuat data paket wisata...</p>
+                                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Flow Modals adapted for Server POST -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-booking">&times;</span>
+            <div class="booking-form">
+                <h2>Form Pemesanan</h2>
+                <!-- Submits directly to the new API instead of LocalStorage -->
+                <form id="checkout-form" action="/api/booking/checkout" method="POST">
+                    <input type="hidden" id="booking-type-hidden" name="type">
+
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <input type="text" id="booking-cat" name="cat" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Pilihan (Rute/Mobil/Paket)</label>
+                        <input type="text" id="booking-detail" name="detail" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Harga Satuan</label>
+                        <input type="text" id="booking-price-display" readonly>
+                        <input type="hidden" id="booking-price" name="basePrice">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Waktu</label>
+                        <input type="time" name="time" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Penumpang</label>
+                        <input type="number" id="passengers" name="passengers" min="1" value="1" required>
+                    </div>
+
+                    <h3>Total Estimasi: <span id="total-price-display" style="color:var(--primary-color)"></span></h3>
+                    <br>
+
+                    <div class="form-group">
+                        <label>Metode Pembayaran</label>
+                        <select name="payment_method" required>
+                            <option value="Transfer Bank">Transfer Bank (BCA)</option>
+                            <option value="GoPay">GoPay</option>
+                            <option value="Kartu Kredit">Kartu Kredit</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Konfirmasi & Buat Tiket</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality simplified
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        const bookingModal = document.getElementById('booking-modal');
+
+        document.querySelectorAll('.btn-book').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const isUserAuth = <%= user ? 'true' : 'false' %>;
+                if (!isUserAuth) {
+                    alert("Harap login terlebih dahulu untuk melakukan pemesanan!");
+                    window.location.href = "/auth";
+                    return;
+                }
+
+                let typePath = this.getAttribute('data-route') || this.getAttribute('data-vehicle') || this.getAttribute('data-package');
+                let cat = this.getAttribute('data-cat');
+                let basePrice = parseInt(this.getAttribute('data-price'));
+
+                document.getElementById('booking-cat').value = cat;
+                document.getElementById('booking-type-hidden').value = cat;
+                document.getElementById('booking-detail').value = typePath;
+                document.getElementById('booking-price').value = basePrice;
+                document.getElementById('booking-price-display').value = 'Rp ' + basePrice.toLocaleString('id-ID');
+                document.getElementById('total-price-display').textContent = 'Rp ' + basePrice.toLocaleString('id-ID');
+
+                checkTotal();
+
+                bookingModal.style.display = 'block';
+            });
+        });
+
+        function checkTotal() {
+            let base = parseInt(document.getElementById('booking-price').value) || 0;
+            let qty = parseInt(document.getElementById('passengers').value) || 1;
+            document.getElementById('total-price-display').textContent = 'Rp ' + (base * qty).toLocaleString('id-ID');
+        }
+
+        document.getElementById('passengers').addEventListener('input', checkTotal);
+
+        document.getElementById('close-booking').addEventListener('click', () => {
+            bookingModal.style.display = 'none';
+        });
+
+        // Check query params for tab switching
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('tab')) {
+            const targetTab = document.querySelector(`[data-tab="${urlParams.get('tab')}"]`);
+            if (targetTab) targetTab.click();
+        }
+    </script>
+
+    <%- include('layouts/footer') %>

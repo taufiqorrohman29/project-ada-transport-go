@@ -1,0 +1,2044 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --primary-color: #800000;
+    --secondary-color: #5a0000;
+    --accent-color: #f1faee;
+    --text-color: #333;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --success-color: #2a9d8f;
+    --warning-color: #e9c46a;
+    --danger-color: #e76f51;
+    --maroon-color: #800000;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* GUNAKAN KODE INI UNTUK HEADER */
+header .container {
+    display: flex;
+    align-items: center;
+}
+
+/* KODE INI UNTUK MENDORONG NAVBAR KE KANAN */
+.navbar {
+    margin-left: auto;
+}
+
+.logo {
+    position: relative;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 110px;
+    margin-right: 15px;
+    margin-top: -25px;
+}
+
+.logo-icon img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+}
+
+.navbar ul li {
+    margin-left: 1.7rem;
+    position: relative;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s;
+    padding-bottom: 5px;
+}
+
+.navbar ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: var(--accent-color);
+}
+
+.navbar ul li a:hover::after {
+    width: 100%;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 3px 0;
+    transition: 0.3s;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--maroon-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: var(--maroon-color);
+}
+
+.btn-secondary {
+    background-color: var(--success-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+}
+
+
+/* --- Gaya Dropdown Profil --- */
+/* Container untuk dropdown */
+.profile-dropdown {
+    position: relative;
+}
+
+/* Menu dropdown, disembunyikan secara default */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    min-width: 220px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+
+/* Tampilkan menu dropdown saat container-nya diklik */
+.profile-dropdown.active .dropdown-menu {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+/* Gaya untuk setiap link di dalam dropdown (LEBIH SPESIFIK) */
+.profile-dropdown .dropdown-menu a {
+    color: #333 !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.profile-dropdown .dropdown-menu a:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color) !important;
+}
+
+.profile-dropdown .dropdown-menu i {
+    margin-right: 12px;
+    width: 18px;
+    text-align: center;
+    color: #555;
+}
+
+/* Panah kecil di atas dropdown */
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent #e0e0e0 transparent;
+}
+
+.dropdown-menu::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    right: 21px;
+    border-width: 0 7px 7px 7px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+
+/* Animasi muncul */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hero Button with Special Animation */
+.btn-hero {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.4s ease;
+}
+
+.btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: var(--maroon-color);
+    z-index: -1;
+    transition: left 0.4s ease;
+}
+
+.btn-hero:hover {
+    border-color: var(--maroon-color);
+    transform: translateY(-2px);
+}
+
+.btn-hero:hover::before {
+    left: 0;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/image1.jpg') no-repeat center center/cover;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: fadeInDown 1s ease;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    animation: fadeIn 1.5s ease;
+}
+
+/* Section Styles */
+section {
+    padding: 5rem 0;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--primary-color);
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.section-title:hover {
+    color: var(--secondary-color);
+}
+
+.section-title:hover::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* Services Section */
+.services {
+    background-color: white;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.service-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.service-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.service-card:hover .service-image img {
+    transform: scale(1.1);
+}
+
+.service-content {
+    padding: 1.5rem;
+}
+
+.service-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+.service-content p {
+    margin-bottom: 1rem;
+}
+
+/* Destinations Section */
+.destinations {
+    background-color: var(--light-color);
+}
+
+.destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.destination-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.destination-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.destination-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.destination-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.destination-card:hover .destination-image img {
+    transform: scale(1.1);
+}
+
+.destination-content {
+    padding: 1.5rem;
+}
+
+.destination-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+/* Booking Section */
+.booking-section {
+    background-color: white;
+}
+
+.booking-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+.tab-content-container {
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+}
+
+.tab-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+}
+
+.tab-content.slide-out-left {
+    transform: translateX(-100%);
+}
+
+.tab-content h3 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--secondary-color);
+}
+
+.booking-grid,
+.rental-grid,
+.tourism-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.booking-card,
+.rental-card,
+.tourism-card {
+    background-color: var(--light-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.booking-card:hover,
+.rental-card:hover,
+.tourism-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.booking-image,
+.rental-image,
+.tourism-image {
+    height: 180px;
+    overflow: hidden;
+}
+
+.booking-image img,
+.rental-image img,
+.tourism-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.booking-card:hover .booking-image img,
+.rental-card:hover .rental-image img,
+.tourism-card:hover .tourism-image img {
+    transform: scale(1.1);
+}
+
+.booking-content,
+.rental-content,
+.tourism-content {
+    padding: 1.5rem;
+}
+
+.booking-content h3,
+.rental-content h3,
+.tourism-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+.booking-content p,
+.rental-content p,
+.tourism-content p {
+    margin-bottom: 0.5rem;
+}
+
+.price {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+.btn-book {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Booking Antar Kota */
+/* 1. Container utama untuk menampung kedua gambar */
+.booking-image-slider {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.booking-image-slider .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+/* 3. Nama animasi untuk slide pertama (Kota Asal) */
+.booking-image-slider .slide-1 {
+    animation-name: slideshow-1;
+}
+
+/* 4. Nama animasi untuk slide kedua (Kota Tujuan) */
+.booking-image-slider .slide-2 {
+    animation-name: slideshow-2;
+}
+
+/* KEYFRAMES */
+@keyframes slideshow-1 {
+
+    0%,
+    40% {
+        opacity: 1;
+    }
+
+    50%,
+    90% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideshow-2 {
+
+    0%,
+    40% {
+        opacity: 0;
+    }
+
+    50%,
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Booking Wisata */
+/* 1. Container utama untuk menampung kedua gambar */
+.tourism-image-slider {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+/* Gaya umum untuk setiap slide (gambar) */
+.tourism-image-slider .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.tourism-image-slider .slide-1 {
+    animation-name: slideshow-1;
+}
+
+.tourism-image-slider .slide-2 {
+    animation-name: slideshow-2;
+}
+
+/* KEYFRAMES */
+@keyframes slideshow-1 {
+
+    0%,
+    40% {
+        opacity: 1;
+    }
+
+    50%,
+    90% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideshow-2 {
+
+    0%,
+    40% {
+        opacity: 0;
+    }
+
+    50%,
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+/* Contact Section */
+.contact {
+    background-color: var(--light-color);
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.contact-item i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-right: 1rem;
+    margin-top: 0.3rem;
+}
+
+.contact-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+.contact-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.remember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remember label {
+    display: flex;
+    align-items: center;
+}
+
+.remember input {
+    margin-right: 0.5rem;
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* --- Footer Logo --- */
+.footer-logo h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* --- Footer Links --- */
+.footer-links h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-links h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: width 0.3s ease;
+}
+
+.footer-links h4:hover::after {
+    width: 80px;
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links ul li a:hover {
+    color: var(--accent-color);
+}
+
+/* --- Footer Social (Ikuti Kami & Pengembang) --- */
+.footer-social h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Garis bawah untuk judul */
+.footer-social h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: width 0.3s ease;
+}
+
+.footer-social h4:hover::after {
+    width: 80px;
+}
+
+/* --- Social Icons (Ikuti Kami) --- */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.social-icons a:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Developer Section (SATU BARIS) --- */
+.developer-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.developer-section h4 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Garis bawah untuk judul "Pengembang" */
+.developer-section h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: width 0.3s ease;
+}
+
+.developer-section h4:hover::after {
+    width: 80px;
+}
+
+/* Grid untuk 6 foto developer - SATU BARIS */
+.developer-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+/* Style untuk setiap avatar developer */
+.developer-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.developer-avatar:hover {
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.developer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.developer-avatar:hover img {
+    transform: scale(1.05);
+}
+
+/* --- Footer Bottom (Hak Cipta di Paling Bawah) --- */
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .social-icons {
+        gap: 12px;
+    }
+
+    .social-icons a {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+
+    .developer-grid {
+        gap: 8px;
+    }
+
+    .developer-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .developer-section {
+        margin-top: 25px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .social-icons a {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .developer-grid {
+        gap: 6px;
+        justify-content: center;
+
+        .developer-avatar {
+            width: 38px;
+            height: 38px;
+        }
+
+        .footer-social h4,
+        .developer-section h4 {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .footer-social h4::after,
+        .developer-section h4::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .footer-social h4:hover::after,
+        .developer-section h4:hover::after {
+            width: 60px;
+            transform: translateX(-50%) scaleX(1);
+        }
+    }
+}
+
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+/* --- Gaya Umum Modal --- */
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 40px 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    animation: modalFadeIn 0.4s ease;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* --- Gaya Form Login --- */
+.modal-content .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.modal-content .input-group input {
+    width: 100%;
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+#login-form .input-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(128, 0, 0, 0.1);
+}
+
+/* Gaya untuk grup password dan ikon mata */
+.password-group {
+    position: relative;
+}
+
+.togglePassword {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+    font-size: 14px;
+}
+
+/* Gaya untuk opsi "Ingat saya" dan "Lupa password" */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.form-options label {
+    display: flex;
+    align-items: center;
+    color: #555;
+    cursor: pointer;
+}
+
+.form-options label input {
+    margin-right: 6px;
+}
+
+.form-options a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.form-options a:hover {
+    text-decoration: underline;
+}
+
+/* Gaya tombol "Masuk" utama */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* --- Gaya Pembatas --- */
+.divider {
+    text-align: center;
+    margin: 25px 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.divider span {
+    background-color: #fff;
+    padding: 0 15px;
+    position: relative;
+    color: #888;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- Gaya Tombol Login Sosial (Background Merah Maroon Sama) --- */
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Jarak antar tombol */
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    /* Background merah maroon untuk semua */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    background-color: var(--secondary-color);
+    /* Efek hover lebih gelap */
+    transform: translateY(-2px);
+}
+
+.social-btn i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+/* --- Gaya Link Pendaftaran --- */
+.register-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #555;
+}
+
+.register-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.profile-info {
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    font-size: 5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.profile-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.booking-history {
+    text-align: left;
+}
+
+.booking-history h4 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.booking-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.booking-item {
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+.booking-item:last-child {
+    border-bottom: none;
+}
+
+.no-booking {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+/* Payment Modal */
+.payment-form {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.order-summary {
+    background-color: var(--light-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+}
+
+.summary-item.total {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    padding-top: 0.8rem;
+    border-top: 1px solid #ddd;
+}
+
+.payment-methods {
+    margin-bottom: 2rem;
+}
+
+.payment-methods h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.payment-method {
+    margin-bottom: 0.8rem;
+}
+
+.payment-method input {
+    margin-right: 0.5rem;
+}
+
+.payment-details-content {
+    background-color: var(--light-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.bank-info p {
+    margin-bottom: 0.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.ewallet-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ewallet-option {
+    display: flex;
+    align-items: center;
+}
+
+.ewallet-option input {
+    margin-right: 0.5rem;
+}
+
+/* Success Modal */
+.success-modal {
+    max-width: 500px;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.success-animation {
+    position: relative;
+    height: 120px;
+    margin-bottom: 2rem;
+}
+
+.success-checkmark {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    background-color: var(--success-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    animation: scaleIn 0.5s ease forwards;
+    z-index: 2;
+}
+
+.success-person {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    color: var(--primary-color);
+    animation: bounceIn 0.8s ease 0.3s forwards;
+    z-index: 1;
+}
+
+.success-modal h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.success-modal p {
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: translateX(-50%) scale(0);
+    }
+
+    to {
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-20px);
+    }
+
+    70% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    90% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .hero-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* --- Header / Logo --- */
+    header {
+        padding: 0.6rem 0;
+    }
+
+    .logo {
+        height: 56px;
+    }
+
+    .logo-icon {
+        width: 100px;
+        height: 60px;
+        margin-right: 8px;
+        margin-top: -8px;
+    }
+
+    .logo h1 {
+        font-size: 1.1rem;
+    }
+
+    header .container {
+        padding: 0 0.75rem;
+    }
+
+    /* --- Hamburger --- */
+    .hamburger {
+        display: flex;
+        margin-left: auto;
+        padding: 6px;
+        flex-shrink: 0;
+    }
+
+    /* --- Mobile navbar --- */
+    .navbar {
+        display: none !important;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        flex-direction: column;
+        background-color: var(--primary-color);
+        width: 100%;
+        max-height: calc(100vh - 56px);
+        overflow-y: auto;
+        text-align: center;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.15);
+        padding: 1.5rem 0;
+        z-index: 1001;
+        margin-left: 0;
+    }
+
+    .navbar.active {
+        display: flex !important;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar ul li {
+        margin: 0.8rem 0;
+    }
+
+    /* Profile dropdown inside mobile menu */
+    .profile-dropdown {
+        justify-content: center !important;
+    }
+
+    #nav-login-btn {
+        justify-content: center !important;
+    }
+
+    .profile-dropdown .dropdown-menu {
+        position: static;
+        display: block;
+        box-shadow: none;
+        background-color: rgba(0, 0, 0, 0.15);
+        border: none;
+        border-radius: 0;
+        min-width: 100%;
+        text-align: center;
+        padding: 0;
+    }
+
+    .profile-dropdown .dropdown-menu a {
+        color: white !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .profile-dropdown .dropdown-menu a:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+        color: white !important;
+    }
+
+    .profile-dropdown .dropdown-menu::before,
+    .profile-dropdown .dropdown-menu::after {
+        display: none;
+    }
+
+    /* Show dropdown content when active (already handled by .profile-dropdown.active) */
+    .profile-dropdown:not(.active) .dropdown-menu {
+        display: none;
+    }
+
+    /* Hamburger animation */
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Page content: account for shorter header */
+    div[style*="padding-top: 80px"] {
+        padding-top: 56px !important;
+    }
+
+    /* --- Sections --- */
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .booking-tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .ewallet-options {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero {
+        height: 80vh;
+    }
+
+    .hero-content h2 {
+        font-size: 1.6rem;
+        padding: 0 1rem;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem;
+        padding: 0 1rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .services-grid,
+    .destinations-grid,
+    .booking-grid,
+    .rental-grid,
+    .tourism-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    /* Extra small: hide logo text, show only image */
+    .logo h1 {
+        font-size: 0.95rem;
+    }
+
+    .logo-icon {
+        width: 70px;
+        height: 45px;
+        margin-right: 6px;
+        margin-top: 0;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Developer Section Container --- */
+.developer-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.developer-section h4 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.developer-section h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: width 0.3s ease;
+}
+
+.developer-section h4:hover::after {
+    width: 80px;
+}
+
+/* --- Developer Grid (SATU BARIS RATA KIRI) --- */
+.developer-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+/* --- Developer Avatar --- */
+.developer-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.developer-avatar:hover {
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.developer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#developerModal {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s ease;
+}
+
+#developerModal .modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 450px;
+    border-radius: 10px;
+    position: relative;
+    animation: slideIn 0.3s ease;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s;
+    z-index: 1;
+}
+
+.close-modal:hover {
+    color: var(--primary-color);
+}
+
+.developer-profile img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 5px 15px rgba(128, 0, 0, 0.2);
+}
+
+.developer-profile h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.developer-profile .role {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.developer-profile p {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.developer-profile .btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.developer-profile .btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(128, 0, 0, 0.3);
+}
+
+/* Responsive */
+/* Tablet */
+@media (max-width: 768px) {
+    .developer-grid {
+        gap: 8px;
+    }
+
+    .developer-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .developer-grid {
+        gap: 6px;
+        justify-content: center;
+        /* Pusatkan di mobile */
+    }
+
+    .developer-avatar {
+        width: 35px;
+        height: 35px;
+    }
+
+    .developer-section h4 {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .developer-section h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .developer-section h4:hover::after {
+        width: 60px;
+        transform: translateX(-50%) scaleX(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

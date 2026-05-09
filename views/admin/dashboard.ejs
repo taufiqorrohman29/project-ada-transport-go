@@ -1,0 +1,263 @@
+<%- include('../layouts/header') %>
+
+    <div class="container" style="margin-top: 40px; margin-bottom: 40px; min-height: 60vh;">
+        <h2 style="margin-bottom: 20px; color: #ff007f;">Dashboard Admin</h2>
+
+        <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/admin/scanner" class="btn btn-primary" style="display:inline-block; padding: 10px 20px;">Buka
+                Scanner Tiket</a>
+            <a href="/admin/messages" class="btn btn-secondary"
+                style="display:inline-block; padding: 10px 20px; background-color: #333; color: white;"><i
+                    class="fas fa-inbox"></i> Kotak Masuk Pesan</a>
+        </div>
+
+        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+            <!-- Add Vehicle Form -->
+            <div
+                style="flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Tambah
+                    Kendaraan Sewa</h3>
+                <form action="/admin/vehicle" method="POST" enctype="multipart/form-data">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Nama Kendaraan</label>
+                        <input type="text" name="name" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Kapasitas (Contoh: '15
+                            seat')</label>
+                        <input type="text" name="capacity" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Harga per hari (Rp)</label>
+                        <input type="number" name="price" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Gambar Kendaraan</label>
+                        <input type="file" name="image" accept="image/*"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Tambah Kendaraan</button>
+                </form>
+            </div>
+
+            <!-- Vehicle List -->
+            <div
+                style="flex: 1.5; min-width: 300px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Daftar
+                    Kendaraan Sewa</h3>
+                <% if (vehicles && vehicles.length> 0) { %>
+                    <ul style="list-style: none; padding: 0;">
+                        <% vehicles.forEach(v=> { %>
+                            <li
+                                style="display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee;">
+                                <div style="display: flex; gap: 15px;">
+                                    <img src="<%= v.image %>" alt="<%= v.name %>"
+                                        style="width: 60px; height: 40px; object-fit: cover; border-radius: 5px;">
+                                    <div>
+                                        <strong style="font-size: 16px;">
+                                            <%= v.name %>
+                                        </strong>
+                                        <div style="color: #666; font-size: 14px; margin-top: 5px;"><i
+                                                class="fas fa-users"></i>
+                                            <%= v.capacity %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                                    <div style="color: #ff007f; font-weight: bold;">Rp <%=
+                                            v.price.toLocaleString('id-ID') %> / hari</div>
+                                    <div>
+                                        <a href="/admin/edit/vehicles/<%= v.id %>"
+                                            style="color: #3f51b5; margin-right: 10px; text-decoration: none; font-size: 14px;"
+                                            title="Edit"><i class="fas fa-edit"></i> Edit</a>
+                                        <form action="/admin/delete/vehicles/<%= v.id %>" method="POST"
+                                            style="display:inline;"
+                                            onsubmit="return confirm('Hapus kendaraan ini secara permanen?');">
+                                            <button type="submit"
+                                                style="background:none; border:none; color: #f44336; cursor: pointer; padding:0; font-size: 14px;"
+                                                title="Hapus"><i class="fas fa-trash"></i> Hapus</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <p>Belum ada kendaraan yang terdaftar.</p>
+                        <% } %>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 30px; flex-wrap: wrap; margin-top: 30px;">
+            <!-- Add Intercity Form -->
+            <div
+                style="flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Tambah Antar
+                    Kota</h3>
+                <form action="/admin/intercity" method="POST" enctype="multipart/form-data">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Rute Utama (Ex: BLITAR -
+                            JUANDA)</label>
+                        <input type="text" name="name" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Rute Lengkap</label>
+                        <input type="text" name="route_desc" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Harga (Rp)</label>
+                        <input type="number" name="price" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Gambar Rute 1</label>
+                        <input type="file" name="image_1" accept="image/*"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Gambar Rute 2</label>
+                        <input type="file" name="image_2" accept="image/*"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Tambah Antar Kota</button>
+                </form>
+            </div>
+
+            <!-- Intercity List -->
+            <div
+                style="flex: 1.5; min-width: 300px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Daftar Antar
+                    Kota</h3>
+                <% if (typeof intercities !=='undefined' && intercities.length> 0) { %>
+                    <ul style="list-style: none; padding: 0;">
+                        <% intercities.forEach(i=> { %>
+                            <li
+                                style="display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee;">
+                                <div>
+                                    <strong style="font-size: 16px;">
+                                        <%= i.name %>
+                                    </strong>
+                                    <div style="color: #666; font-size: 14px; margin-top: 5px;">
+                                        <%= i.route_desc %>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                                    <div style="color: #ff007f; font-weight: bold;">Rp <%=
+                                            i.price.toLocaleString('id-ID') %>
+                                    </div>
+                                    <div>
+                                        <a href="/admin/edit/intercity/<%= i.id %>"
+                                            style="color: #3f51b5; margin-right: 10px; text-decoration: none; font-size: 14px;"
+                                            title="Edit"><i class="fas fa-edit"></i> Edit</a>
+                                        <form action="/admin/delete/intercity/<%= i.id %>" method="POST"
+                                            style="display:inline;"
+                                            onsubmit="return confirm('Hapus rute antar kota ini secara permanen?');">
+                                            <button type="submit"
+                                                style="background:none; border:none; color: #f44336; cursor: pointer; padding:0; font-size: 14px;"
+                                                title="Hapus"><i class="fas fa-trash"></i> Hapus</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <p>Belum ada rute antar kota terdaftar.</p>
+                        <% } %>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 30px; flex-wrap: wrap; margin-top: 30px;">
+            <!-- Add Tourism Form -->
+            <div
+                style="flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Tambah Paket
+                    Wisata</h3>
+                <form action="/admin/tourism" method="POST" enctype="multipart/form-data">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Nama Paket (Ex: Paket
+                            Bali)</label>
+                        <input type="text" name="name" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Durasi (Ex: 3 Hari 2
+                            Malam)</label>
+                        <input type="text" name="duration" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Destinasi Inti</label>
+                        <input type="text" name="destinations" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Harga Mulai (Rp)</label>
+                        <input type="number" name="price" required
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Gambar Destinasi 1</label>
+                        <input type="file" name="image_1" accept="image/*"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="display:block; margin-bottom: 5px; color:#555;">Gambar Destinasi 2</label>
+                        <input type="file" name="image_2" accept="image/*"
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Tambah Paket Wisata</button>
+                </form>
+            </div>
+
+            <!-- Tourism List -->
+            <div
+                style="flex: 1.5; min-width: 300px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Daftar Paket
+                    Wisata</h3>
+                <% if (typeof tourisms !=='undefined' && tourisms.length> 0) { %>
+                    <ul style="list-style: none; padding: 0;">
+                        <% tourisms.forEach(t=> { %>
+                            <li
+                                style="display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee;">
+                                <div>
+                                    <strong style="font-size: 16px;">
+                                        <%= t.name %>
+                                    </strong> <span style="font-size:12px; color:#888;">(<%= t.duration %>)</span>
+                                    <div style="color: #666; font-size: 14px; margin-top: 5px;">
+                                        <%= t.destinations %>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+                                    <div style="color: #ff007f; font-weight: bold;">Rp <%=
+                                            t.price.toLocaleString('id-ID') %>
+                                    </div>
+                                    <div>
+                                        <a href="/admin/edit/tourism/<%= t.id %>"
+                                            style="color: #3f51b5; margin-right: 10px; text-decoration: none; font-size: 14px;"
+                                            title="Edit"><i class="fas fa-edit"></i> Edit</a>
+                                        <form action="/admin/delete/tourism/<%= t.id %>" method="POST"
+                                            style="display:inline;"
+                                            onsubmit="return confirm('Hapus paket wisata ini secara permanen?');">
+                                            <button type="submit"
+                                                style="background:none; border:none; color: #f44336; cursor: pointer; padding:0; font-size: 14px;"
+                                                title="Hapus"><i class="fas fa-trash"></i> Hapus</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <p>Belum ada paket wisata terdaftar.</p>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../layouts/footer') %>
