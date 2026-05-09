@@ -68,4 +68,4 @@ Proyek kolaboratif kelas tinggi **Ada Transport Go** 2026 dikembangkan oleh:
 | **Revina Ardiana Putri** | Data Analyst |
 
 ---
-*© 2026 Ada Transport Go. All rights reserved.*
+*© 2026 Ada Transport Go. All rights reserved.* 
