@@ -1,0 +1,4 @@
+# DUMMY FILE
+# This file is intentionally left blank for the public repository.
+# In a real environment, this would contain active session cookies.
+cookie_id=dummy_value_67890

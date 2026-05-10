@@ -38,6 +38,28 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Bulk delete bookings
+router.post('/bookings/delete-all', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM bookings');
+        res.redirect('/admin');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Gagal membersihkan histori pesanan.");
+    }
+});
+
+// Delete single booking
+router.post('/bookings/delete/:id', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM bookings WHERE id = ?', [req.params.id]);
+        res.redirect('/admin');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Gagal menghapus pesanan.");
+    }
+});
+
 // Add Vehicle Route
 router.post('/vehicle', upload.single('image'), async (req, res) => {
     try {
@@ -84,6 +106,18 @@ router.post('/tourism', upload.fields([{ name: 'image_1', maxCount: 1 }, { name:
 
 // Scanner Route
 router.get('/scanner', (req, res) => {
+    const hostHeader = req.get('host') || req.hostname || '';
+    const isLocalNetwork = /^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(hostHeader);
+    const proto = req.get('x-forwarded-proto') || req.protocol;
+
+    console.log(`[SCANNER DEBUG] Host: ${hostHeader}, Protocol: ${proto}, Local: ${isLocalNetwork}`);
+
+    if (isLocalNetwork && proto !== 'https') {
+        const domain = hostHeader.split(':')[0];
+        const httpsUrl = `https://${domain}:3443${req.originalUrl}`;
+        return res.redirect(302, httpsUrl);
+    }
+
     res.render('scanner');
 });
 

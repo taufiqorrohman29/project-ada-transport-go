@@ -11,6 +11,94 @@
                     class="fas fa-inbox"></i> Kotak Masuk Pesan</a>
         </div>
 
+        <div
+            style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; padding-bottom: 10px;">
+                <h3 style="margin: 0;">Daftar Pesanan (Booking Management)</h3>
+                <% if (typeof bookings !=='undefined' && bookings.length> 0) { %>
+                    <form action="/admin/bookings/delete-all" method="POST"
+                        onsubmit="return confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SEMUA riwayat pesanan? Data tidak dapat dikembalikan!');">
+                        <button type="submit" class="btn btn-danger"
+                            style="background-color: #f44336; color: white; border: none; border-radius: 5px; padding: 8px 15px; cursor: pointer;"><i
+                                class="fas fa-trash-alt"></i> Bersihkan Semua Riwayat</button>
+                    </form>
+                    <% } %>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="background-color: #f9f9f9;">
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">No. Ref</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">Pemesan</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">Jenis Rute/Armada</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">Detail & Tujuan</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">Jadwal</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">Pembayaran</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd;">Status</th>
+                            <th style="padding: 12px; border-bottom: 2px solid #ddd; text-align: right;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof bookings !=='undefined' && bookings.length> 0) { %>
+                            <% bookings.forEach(b=> { %>
+                                <tr style="border-bottom: 1px solid #eee;">
+                                    <td style="padding: 12px; font-weight: bold; color: #ff007f;">
+                                        <%= b.booking_ref %>
+                                    </td>
+                                    <td style="padding: 12px;"><i class="fas fa-user" style="color:#aaa;"></i>
+                                        <%= b.customer_name %>
+                                    </td>
+                                    <td style="padding: 12px;"><span
+                                            style="background: #e3f2fd; color: #1976d2; font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 12px;">
+                                            <%= b.type %>
+                                        </span></td>
+                                    <td style="padding: 12px;">
+                                        <%= b.detail %> <br><span style="font-size:12px; color:#888;">(<%= b.passengers
+                                                    %> Penumpang)</span>
+                                    </td>
+                                    <td style="padding: 12px;"><span style="color:#333; font-weight:500;">📅 <%= b.date
+                                                %></span><br><span style="color:#888;">⏰ <%= b.time %></span></td>
+                                    <td style="padding: 12px; color: #2a9d8f; font-weight: bold;">
+                                        <%= b.price %>
+                                    </td>
+                                    <td style="padding: 12px;">
+                                        <% if (b.status==='Menunggu Konfirmasi' ) { %>
+                                            <span style="color: #f57c00; font-weight: bold;"><i
+                                                    class="fas fa-clock"></i>
+                                                <%= b.status %>
+                                            </span>
+                                            <% } else if (b.status.toLowerCase().includes('lunas')) { %>
+                                                <span style="color: #2a9d8f; font-weight: bold;"><i
+                                                        class="fas fa-check-circle"></i>
+                                                    <%= b.status %>
+                                                </span>
+                                                <% } else { %>
+                                                    <%= b.status %>
+                                                        <% } %>
+                                    </td>
+                                    <td style="padding: 12px; text-align: right;">
+                                        <form action="/admin/bookings/delete/<%= b.id %>" method="POST"
+                                            style="display:inline;"
+                                            onsubmit="return confirm('Hapus riwayat pesanan ini secara permanen?');">
+                                            <button type="submit"
+                                                style="background: none; border: none; color: #f44336; cursor: pointer; padding: 0; font-size: 14px;"
+                                                title="Hapus"><i class="fas fa-trash"></i> Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="8" style="padding: 20px; text-align: center; color: #666;">
+                                                Belum ada pesanan masuk.</td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
             <!-- Add Vehicle Form -->
             <div

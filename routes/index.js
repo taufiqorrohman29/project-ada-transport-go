@@ -47,10 +47,6 @@ router.get('/booking-history', async (req, res) => {
     }
 });
 
-// Admin Scanner route
-router.get('/admin/scanner', (req, res) => {
-    res.render('scanner');
-});
 
 // Dynamic E-Ticket Route
 router.get('/ticket/:ref', async (req, res) => {

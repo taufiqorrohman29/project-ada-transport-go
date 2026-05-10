@@ -67,19 +67,18 @@
             left: 0;
             right: 0;
             bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             pointer-events: none;
             z-index: 5;
         }
 
         .scan-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 250px;
             height: 250px;
             border: 2px solid rgba(255, 0, 127, 0.3);
-            position: relative;
             box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.6);
             border-radius: 20px;
             overflow: hidden;
@@ -136,7 +135,10 @@
         }
 
         .scan-text {
-            margin-top: 30px;
+            position: fixed;
+            top: calc(50% + 150px);
+            left: 0;
+            right: 0;
             color: rgba(255, 255, 255, 0.8);
             font-size: 14px;
             text-align: center;
@@ -240,7 +242,11 @@
             // Not HTTPS — show helpful redirect message
             const scanText = document.querySelector('.scan-text');
             if (scanText) {
-                const httpsUrl = 'https://' + location.hostname + ':3443' + location.pathname;
+                const isLocalNetwork = /^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(location.hostname);
+                const httpsUrl = isLocalNetwork
+                    ? 'https://' + location.hostname + ':3443' + location.pathname
+                    : 'https://' + location.hostname + location.pathname;
+
                 scanText.innerHTML =
                     '⚠️ Kamera memerlukan HTTPS.<br>' +
                     '<a href="' + httpsUrl + '" style="color:#ff007f;font-weight:600;">' +
@@ -297,7 +303,7 @@
 
             html5QrCode.start(
                 { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
+                { fps: 10 },
                 onScanSuccess
             ).catch(err => {
                 console.error("Camera access denied or error:", err);

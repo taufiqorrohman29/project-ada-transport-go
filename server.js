@@ -4,7 +4,6 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const https = require('https');
 const http = require('http');
 const fs = require('fs');
 require('dotenv').config();
@@ -15,13 +14,16 @@ const { initDB } = require('./models/db');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Set Trust Proxy to correctly handle HTTPS forwards from NGINX/ngrok
+app.set('trust proxy', true);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
-    secret: process.env.SESSION_SECRET || '<MASUKKAN_KODE_RAHASIA_SESI_DISINI>',
+    secret: process.env.SESSION_SECRET || 'secret123',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
@@ -55,46 +57,19 @@ app.use('/api', apiRoutes);
 app.use('/admin', adminRoutes);
 
 const HTTP_PORT = process.env.PORT || 3000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
 
 // Init DB and Start Server
 initDB().then(() => {
-    // --- HTTPS server (required for camera on mobile) ---
-    const certPath = path.join(__dirname, 'cert.pem');
-    const keyPath = path.join(__dirname, 'key.pem');
-
-    if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
-        const httpsOptions = {
-            cert: fs.readFileSync(certPath),
-            key: fs.readFileSync(keyPath),
-        };
-        https.createServer(httpsOptions, app).listen(HTTPS_PORT, () => {
-            console.log(`HTTPS server running on port ${HTTPS_PORT}`);
-        });
-    }
-
-    // --- HTTP server: redirect to HTTPS for camera-dependent paths ---
-    const httpApp = express();
-    httpApp.use((req, res, next) => {
-        // Redirect scanner page to HTTPS so camera works
-        if (req.path.startsWith('/admin/scanner')) {
-            const httpsUrl = `https://${req.hostname}:${HTTPS_PORT}${req.url}`;
-            return res.redirect(301, httpsUrl);
-        }
-        next();
-    });
-    // For all other routes, serve normally over HTTP
-    httpApp.use(app);
-    const httpServer = http.createServer(httpApp);
+    // Start HTTP server
+    const httpServer = http.createServer(app);
     httpServer.on('error', (err) => {
         if (err.code === 'EADDRINUSE') {
-            console.log(`HTTP port ${HTTP_PORT} already in use — HTTPS-only mode on port ${HTTPS_PORT}`);
+            console.log(`HTTP port ${HTTP_PORT} already in use`);
         } else {
             console.error('HTTP server error:', err);
         }
     });
     httpServer.listen(HTTP_PORT, () => {
-        console.log(`HTTP  server running on port ${HTTP_PORT}`);
-        console.log(`For QR scanner use HTTPS: https://<IP>:${HTTPS_PORT}/admin/scanner`);
+        console.log(`HTTP server running on port ${HTTP_PORT}`);
     });
 });

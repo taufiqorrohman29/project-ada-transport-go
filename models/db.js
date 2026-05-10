@@ -4,7 +4,7 @@ require('dotenv').config();
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '<MASUKKAN_PASSWORD_DB_ANDA>',
+  password: process.env.DB_PASS || 'rootpassword',
   database: process.env.DB_NAME || 'adago_db',
   waitForConnections: true,
   connectionLimit: 10,
@@ -21,7 +21,7 @@ async function initDB() {
         const tempPool = mysql.createPool({
           host: process.env.DB_HOST || 'localhost',
           user: process.env.DB_USER || 'root',
-          password: process.env.DB_PASS || '<MASUKKAN_PASSWORD_DB_ANDA>',
+          password: process.env.DB_PASS || 'rootpassword',
         });
         await tempPool.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'adago_db'}\``);
         await tempPool.end();
@@ -54,7 +54,7 @@ async function initDB() {
     const bcrypt = require('bcrypt');
     const [adminRows] = await pool.query("SELECT * FROM `users` WHERE email = 'admin@adago.com'");
     if (adminRows.length === 0) {
-      const hashedAdminPwd = await bcrypt.hash('<PASSWORD_ADMIN_DEFAULT_ANDA>', 10);
+      const hashedAdminPwd = await bcrypt.hash('admin123', 10);
       await pool.query("INSERT INTO users (username, email, password, role) VALUES ('Admin', 'admin@adago.com', ?, 'admin')", [hashedAdminPwd]);
     }
 
