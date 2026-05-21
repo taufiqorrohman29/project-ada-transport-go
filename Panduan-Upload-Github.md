@@ -31,6 +31,11 @@ Ketik perintah ini untuk merekam semua status kode, file EJS, Docker, dll untuk 
 git add .
 ```
 
+git config
+git config --global user.name "taufiqorrohman29"
+git config --global user.email "email.akun.github@anda.com"
+
+git config pull.rebase false
 ### Langkah 4: Berikan Stempel Pesan (Commit)
 *Commit* ibarat memberi nama pada paket pengiriman Anda.
 ```bash
@@ -49,6 +54,8 @@ Perintah ini mengajari folder lokal Anda tentang keberadaan tautan GitHub Anda d
 git remote add origin https://github.com/taufiqorrohman29/project-ada-transport-go.git
 ```
 *(Apabila muncul tulisan `error: remote origin already exists`, Anda bisa abaikan langkah ini)*
+
+git pull origin main --allow-unrelated-histories
 
 ### Langkah 7: Proses Peluncuran Eudaimonik (Push)
 Ini adalah eksekusi pamungkas yang menyuruh komputer menembakkan kode Anda secara *Live*:

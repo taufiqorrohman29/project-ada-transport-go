@@ -1,4 +1,14 @@
+# buat login admin di cli
+# curl -X POST http://localhost:3000/api/auth/login \
+#      -d "email=admin@adago.com.com&password=admin123" \
+#      -c admin_cookies.txt
+
+# contoh penggunaan
+# curl -X DELETE -b admin_cookies.txt http://localhost:3000/api/booking/delete/123
+
 # DUMMY FILE
 # This file is intentionally left blank for the public repository.
 # In a real environment, this would contain active session cookies.
 cookie_id=dummy_value_12345
+
+
