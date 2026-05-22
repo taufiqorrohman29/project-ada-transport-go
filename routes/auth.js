@@ -2,8 +2,19 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const { pool } = require('../models/db');
 require('dotenv').config();
+
+// Setup Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
+});
 
 router.post('/register', async (req, res) => {
     try {
@@ -78,8 +89,40 @@ router.post('/forgot-password', async (req, res) => {
         const [result] = await pool.query('UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE email = ?', [token, expireDate, req.body.email]);
 
         if (result.affectedRows > 0) {
-            console.log(`\n\n[MOCK EMAIL SENT] Reset Password Link: http://localhost:${process.env.PORT || 3000}/reset-password/${token}\n\n`);
-            res.render('forgot-password', { message: 'Link reset password telah dikirim ke email (Lihat Terminal).' });
+            const protocol = req.get('x-forwarded-proto') || req.protocol;
+            const resetLink = `${protocol}://${req.get('host')}/reset-password/${token}`;
+            const mailOptions = {
+                from: process.env.SMTP_USER || '"Ada Transport Go" <no-reply@adago.com>',
+                to: req.body.email,
+                subject: 'Pemberitahuan Reset Password - Ada Transport Go',
+                html: `
+                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 40px 20px; border-radius: 10px;">
+                    <div style="background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center;">
+                        <h1 style="color: #2a9d8f; margin-bottom: 10px; font-size: 28px;">Ada Transport Go</h1>
+                        <p style="color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                            Halo, kami menerima permintaan untuk mengatur ulang kata sandi pada akun Anda. 
+                            Silakan klik tombol di bawah ini untuk membuat sandi baru.
+                        </p>
+                        <a href="${resetLink}" style="display: inline-block; background-color: #4590dbff; color: #172bdeff; text-decoration: none; font-weight: bold; font-size: 16px; padding: 14px 30px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                            Reset Password Sekarang
+                        </a>
+                        <p style="color: #888; font-size: 13px; line-height: 1.5; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                            Tautan ini hanya berlaku selama <strong>1 jam</strong>.<br>
+                            Jika Anda tidak pernah meminta pergantian password, abaikan saja email ini dan akun Anda akan dipastikan tetap aman.
+                        </p>
+                    </div>
+                </div>
+                `
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    return res.render('forgot-password', { message: 'Gagal mengirim email reset password. Silakan hubungi administrator.' });
+                }
+                console.log('Reset Password Email sent: ' + info.response);
+                res.render('forgot-password', { message: 'Link reset password telah dikirim ke email.' });
+            });
         } else {
             res.render('forgot-password', { message: 'Email tidak terdaftar.' });
         }

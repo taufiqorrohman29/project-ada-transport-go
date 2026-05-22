@@ -2,7 +2,22 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('../models/db');
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
+
+// Helper to safely delete uploaded files
+const deleteFile = (filePath) => {
+    if (filePath && filePath.startsWith('/uploads/')) {
+        const fullPath = path.join(__dirname, '..', 'public', filePath);
+        if (fs.existsSync(fullPath)) {
+            try {
+                fs.unlinkSync(fullPath);
+            } catch (err) {
+                console.error("Failed to delete file:", err);
+            }
+        }
+    }
+};
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
@@ -13,7 +28,17 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|webp|gif/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    if (extname && mimetype) {
+        return cb(null, true);
+    } else {
+        cb(new Error('Hanya file gambar yang diperbolehkan!'));
+    }
+};
+const upload = multer({ storage, fileFilter });
 
 // Protection Middleware: Check if user exists and is admin
 router.use((req, res, next) => {
@@ -64,7 +89,7 @@ router.post('/bookings/delete/:id', async (req, res) => {
 router.post('/vehicle', upload.single('image'), async (req, res) => {
     try {
         const { name, capacity, price } = req.body;
-        const image = req.file ? '/uploads/' + req.file.filename : '/imagebooking2/Elf.jpg';
+        const image = req.file ? '/uploads/' + req.file.filename : '/images/default.jpg';
 
         await pool.query('INSERT INTO vehicles (name, capacity, price, image) VALUES (?, ?, ?, ?)', [name, capacity, parseInt(price), image]);
         res.redirect('/admin');
@@ -114,7 +139,8 @@ router.get('/scanner', (req, res) => {
 
     if (isLocalNetwork && proto !== 'https') {
         const domain = hostHeader.split(':')[0];
-        const httpsUrl = `https://${domain}:3443${req.originalUrl}`;
+        const httpsPort = process.env.HTTPS_PORT || 3443;
+        const httpsUrl = `https://${domain}:${httpsPort}${req.originalUrl}`;
         return res.redirect(302, httpsUrl);
     }
 
@@ -149,6 +175,13 @@ router.post('/delete/:type/:id', async (req, res) => {
     const validTypes = ['vehicles', 'intercity', 'tourism'];
     if (!validTypes.includes(type)) return res.redirect('/admin');
     try {
+        const [rows] = await pool.query(`SELECT * FROM ${type} WHERE id = ?`, [id]);
+        if (rows.length > 0) {
+            const item = rows[0];
+            if (item.image) deleteFile(item.image);
+            if (item.image_1) deleteFile(item.image_1);
+            if (item.image_2) deleteFile(item.image_2);
+        }
         await pool.query(`DELETE FROM ${type} WHERE id = ?`, [id]);
         res.redirect('/admin');
     } catch (e) {
@@ -176,9 +209,13 @@ router.get('/edit/:type/:id', async (req, res) => {
 router.post('/edit/:type/:id', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'image_1', maxCount: 1 }, { name: 'image_2', maxCount: 1 }]), async (req, res) => {
     const { type, id } = req.params;
     try {
+        const [rows] = await pool.query(`SELECT * FROM ${type} WHERE id = ?`, [id]);
+        const oldItem = rows.length > 0 ? rows[0] : null;
+
         if (type === 'vehicles') {
             const { name, capacity, price } = req.body;
             if (req.files && req.files['image']) {
+                if (oldItem && oldItem.image) deleteFile(oldItem.image);
                 await pool.query('UPDATE vehicles SET name=?, capacity=?, price=?, image=? WHERE id=?', [name, capacity, parseInt(price), '/uploads/' + req.files['image'][0].filename, id]);
             } else {
                 await pool.query('UPDATE vehicles SET name=?, capacity=?, price=? WHERE id=?', [name, capacity, parseInt(price), id]);
@@ -187,8 +224,14 @@ router.post('/edit/:type/:id', upload.fields([{ name: 'image', maxCount: 1 }, { 
             const { name, route_desc, price } = req.body;
             let query = 'UPDATE intercity SET name=?, route_desc=?, price=?';
             let params = [name, route_desc, parseInt(price)];
-            if (req.files && req.files['image_1']) { query += ', image_1=?'; params.push('/uploads/' + req.files['image_1'][0].filename); }
-            if (req.files && req.files['image_2']) { query += ', image_2=?'; params.push('/uploads/' + req.files['image_2'][0].filename); }
+            if (req.files && req.files['image_1']) { 
+                if (oldItem && oldItem.image_1) deleteFile(oldItem.image_1);
+                query += ', image_1=?'; params.push('/uploads/' + req.files['image_1'][0].filename); 
+            }
+            if (req.files && req.files['image_2']) { 
+                if (oldItem && oldItem.image_2) deleteFile(oldItem.image_2);
+                query += ', image_2=?'; params.push('/uploads/' + req.files['image_2'][0].filename); 
+            }
             query += ' WHERE id=?';
             params.push(id);
             await pool.query(query, params);
@@ -196,8 +239,14 @@ router.post('/edit/:type/:id', upload.fields([{ name: 'image', maxCount: 1 }, { 
             const { name, duration, destinations, price } = req.body;
             let query = 'UPDATE tourism SET name=?, duration=?, destinations=?, price=?';
             let params = [name, duration, destinations, parseInt(price)];
-            if (req.files && req.files['image_1']) { query += ', image_1=?'; params.push('/uploads/' + req.files['image_1'][0].filename); }
-            if (req.files && req.files['image_2']) { query += ', image_2=?'; params.push('/uploads/' + req.files['image_2'][0].filename); }
+            if (req.files && req.files['image_1']) { 
+                if (oldItem && oldItem.image_1) deleteFile(oldItem.image_1);
+                query += ', image_1=?'; params.push('/uploads/' + req.files['image_1'][0].filename); 
+            }
+            if (req.files && req.files['image_2']) { 
+                if (oldItem && oldItem.image_2) deleteFile(oldItem.image_2);
+                query += ', image_2=?'; params.push('/uploads/' + req.files['image_2'][0].filename); 
+            }
             query += ' WHERE id=?';
             params.push(id);
             await pool.query(query, params);

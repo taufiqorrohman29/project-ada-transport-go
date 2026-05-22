@@ -15,7 +15,7 @@ async function initDB() {
   try {
     // Note: If the database does not exist, creating the pool with 'database: adago_db' will fail.
     // So we connect without database to create it if it doesn't exist.
-    let retries = 5;
+    let retries = 15;
     while (retries > 0) {
       try {
         const tempPool = mysql.createPool({

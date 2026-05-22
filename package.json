@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/taufiqorrohman29/project-ada-transport-go.git"
+    "url": "git+https://github.com/taufiqorrohman29/project-ada-transport-go-privat.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/taufiqorrohman29/project-ada-transport-go/issues"
+    "url": "https://github.com/taufiqorrohman29/project-ada-transport-go-privat/issues"
   },
-  "homepage": "https://github.com/taufiqorrohman29/project-ada-transport-go#readme",
+  "homepage": "https://github.com/taufiqorrohman29/project-ada-transport-go-privat#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",

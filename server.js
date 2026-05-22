@@ -26,7 +26,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'secret123',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 
 // Allow camera + other permissions for QR scanner (Permissions-Policy header)

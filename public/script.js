@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             name: "Taufiqorrohman",
             role: "Cyber Security & Full Stack Developer",
             bio: "Ahli dalam mengamankan infrastruktur web dan merancang aplikasi secara menyeluruh (Full Stack) mulai dari antarmuka hingga pengelolaan server.",
-            PortofolioLink: "#",
+            PortofolioLink: "https://github.com/taufiqorrohman29",
         },
     };
 
